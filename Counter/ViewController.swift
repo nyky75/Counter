@@ -9,53 +9,52 @@ import UIKit
 
 class ViewController: UIViewController {
     
-    @IBOutlet weak var logField: UITextView!
-    @IBOutlet weak var toZero: UIButton!
-    @IBOutlet weak var minusButton: UIButton!
-    @IBOutlet weak var counerButton: UIButton!
-    @IBOutlet weak var labelUILabel: UILabel!
+    @IBOutlet weak private var logField: UITextView!
+    @IBOutlet weak private var toZeroButton: UIButton!
+    @IBOutlet weak private var minusButton: UIButton!
+    @IBOutlet weak private var counerButton: UIButton!
+    @IBOutlet weak private var countLabel: UILabel!
     
     private var counter: Int = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // Do any additional setup after loading the view.
-        labelUILabel.textAlignment = .center
-        labelUILabel.text = String(counter)
+        countLabel.textAlignment = .center
+        countLabel.text = String(counter)
         logField.text = "История изменений:"
-        
+        logField.isUserInteractionEnabled = false
     }
     
-    @IBAction func increaseCounterOnTouch(_ sender: Any) {
+    @IBAction private func increaseCounterOnTouch(_ sender: Any) {
         counter += 1
-        labelUILabel.text = String(counter)
+        countLabel.text = String(counter)
         addLog(action: "+")
     }
-    @IBAction func degreseCounterOnTouch(_ sender: Any) {
+    @IBAction private func degreseCounterOnTouch(_ sender: Any) {
         counter -= 1
         if counter < 0 {
             addLog(action: "попытка уменьшить значение счётчика ниже 0")
             counter = 0
             return
         }
-        labelUILabel.text = String(counter)
+        countLabel.text = String(counter)
         addLog(action: "-")
     }
     
-    @IBAction func counterToZero(_ sender: Any) {
+    @IBAction private func counterToZero(_ sender: Any) {
         counter = 0
-        labelUILabel.text = String(counter)
+        countLabel.text = String(counter)
         addLog(action: "0")
     }
-    func perfomDate() -> String {
+    private func perfomDate() -> String {
         let today: Date = Date.now
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "HH:mm E, d MMM y"
         return dateFormatter.string(from: today)
 
     }
-    func addLog(action: String){
+    private func addLog(action: String){
         scrollTextField(textView: logField)
         let data: String = perfomDate()
         if (action.count > 2) {
@@ -64,14 +63,17 @@ class ViewController: UIViewController {
         }
         switch action {
         case "0":
-            logField.textStorage.append(NSAttributedString(string: "\n" + data + " " + "значение изменено на " + action))
+            logField.textStorage.append(NSAttributedString(
+                string: "\n" + data + " " + "значение изменено на " + action)
+            )
         default:
-            logField.textStorage.append(NSAttributedString(string: "\n" + data + " " + "значение изменено на " + action + "1"))
+            logField.textStorage.append(NSAttributedString(
+                string: "\n" + data + " " + "значение изменено на " + action + "1")
+            )
         }
         scrollTextField(textView: logField)
-//        logField.textStorage.append(NSAttributedString(string: "\n" + data + " " + "значение изменено на " + action + "1"))
     }
-    func scrollTextField(textView: UITextView) {
+    private func scrollTextField(textView: UITextView) {
         if textView.text.count > 0 {
             let location = textView.text.count - 1
             let bottom = NSMakeRange(location, 1)
